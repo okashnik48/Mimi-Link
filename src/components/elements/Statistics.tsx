@@ -13,7 +13,7 @@ const statisticsList: Stats[] = [
   },
   {
     count: 4,
-    fullLinkName: "235234.com",
+    fullLinkName: "235234lkgdkf;glkdf;lgk;ldsfk;lgksdg'ksfd;gksdlfg.com",
   },
   {
     count: 6,
@@ -93,11 +93,17 @@ const Statistics: FC = () => {
         >
           <div style={{ display: "block" }}>
             <div style={{ display: "inline-block" }}>{`${index + 1}.`}</div>
-            <div style={{ display: "inline-block", marginLeft: "10px" }}>
+            <div
+              style={{
+                display: "inline-block",
+                marginLeft: "10px",
+                width: "400px",
+              }}
+            >
               {listItem.fullLinkName}
             </div>
           </div>
-          <div>count: {listItem.count}</div>
+          <div style={{ width: "100px" }}>count: {listItem.count}</div>
         </div>
       ))}
       {statisticsList.length === 0 ? <Empty /> : <></>}

@@ -11,9 +11,9 @@ type links = Record<string, LinkStat>
 
 const linkService = serviceApi.injectEndpoints({
   endpoints: (builder) => ({
-    sendFullUrl: builder.mutation<{shortLink: string}, {linkName: string}>({
+    sendFullUrl: builder.mutation<string , {short_link: string}>({
       query: (body) => ({
-        url: "shortLink",
+        url: "/transform",
         method: "POST",
         body,
       }),
@@ -30,12 +30,12 @@ const linkService = serviceApi.injectEndpoints({
     }),
     getLinksStatistics: builder.query<LinkStat[], null>({
       query: () => ({
-        url: "stats"
+        url: "statistics"
       }),
     }),
     getFullLink: builder.query<string, string>({
         query: (uuId) => ({
-          url: `stats${uuId}`,
+          url: `original/${uuId}`,
         }),
       }),
   }),

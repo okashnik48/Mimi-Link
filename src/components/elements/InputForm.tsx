@@ -10,7 +10,7 @@ import linkService from "../../services/link.service";
 
 import { Typography } from "antd";
 
-const { Paragraph, Text } = Typography;
+const { Paragraph } = Typography;
 
 type DefaultValues = {
   linkName: string;
@@ -36,7 +36,7 @@ const Auth: FC = () => {
   console.debug(error)
   const onSubmit: SubmitHandler<DefaultValues> = (formData) => {
     console.log(formData);
-    sendFullLinkTrigger(formData);
+    sendFullLinkTrigger({short_link: formData.linkName});
   };
 
   return (
@@ -77,7 +77,7 @@ const Auth: FC = () => {
       ) : isError ? (
         <h2 style={{ marginTop: "30px", color: "red" }}>Something wrong</h2>
       ) : (
-        <Paragraph copyable={data ? true : false}>{data?.shortLink}</Paragraph>
+        <Paragraph style={{fontSize: "30px", marginTop: "20px"}} copyable={data ? true : false}>{data}</Paragraph>
       )}
     </div>
   );

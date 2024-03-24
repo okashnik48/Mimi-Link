@@ -4,7 +4,7 @@ import {
   } from "@reduxjs/toolkit/query/react";
   import { RootState } from "../store/store";
 
-  export const ROOT_URL = "https://waisys.dev.m0e.space/api/";
+  export const ROOT_URL = "http://localhost:8080/api";
 
 
   
