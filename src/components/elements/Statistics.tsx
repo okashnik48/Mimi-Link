@@ -73,8 +73,6 @@ const Statistics: FC = () => {
     }
   }, [sortParam, statisticsList]);
 
-  console.debug(sortedStatisticsList)
-
   return (
     <div
       style={{

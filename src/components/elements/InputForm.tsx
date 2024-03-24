@@ -33,9 +33,7 @@ const Auth: FC = () => {
 
   const [sendFullLinkTrigger, { data, isLoading, isError, error }] =
     linkService.useSendFullUrlMutation();
-  console.debug(error)
   const onSubmit: SubmitHandler<DefaultValues> = (formData) => {
-    console.log(formData);
     sendFullLinkTrigger({original_link: formData.linkName});
   };
 
