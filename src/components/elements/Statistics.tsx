@@ -1,25 +1,27 @@
-import { Empty, Select } from "antd";
+import { Empty, Select, Spin } from "antd";
 import React, { FC, useMemo, useState } from "react";
+import linkService from "../../services/link.service";
+
 
 type Stats = {
   count: number;
   fullLinkName: string;
 };
 
-const statisticsList: Stats[] = [
-  {
-    count: 1,
-    fullLinkName: "def.org",
-  },
-  {
-    count: 4,
-    fullLinkName: "235234lkgdkf;glkdf;lgk;ldsfk;lgksdg'ksfd;gksdlfg.com",
-  },
-  {
-    count: 6,
-    fullLinkName: "234we.co",
-  },
-];
+// const statisticsList: Stats[] = [
+//   {
+//     count: 1,
+//     fullLinkName: "def.org",
+//   },
+//   {
+//     count: 4,
+//     fullLinkName: "235234lkgdkf;glkdf;lgk;ldsfk;lgksdg'ksfd;gksdlfg.com",
+//   },
+//   {
+//     count: 6,
+//     fullLinkName: "234we.co",
+//   },
+// ];
 
 const sortOptions = [
   {
@@ -34,12 +36,25 @@ const sortOptions = [
     label: "newest",
     value: "newest",
   },
+  {
+    label: "oldest", 
+    value: "oldest"
+  }
 ];
 
-type SortParams = "count up" | "count down" | "newest";
+type SortParams = "count up" | "count down" | "newest" | "oldest";
 
 const Statistics: FC = () => {
   const [sortParam, setSortParam] = useState<SortParams>("newest");
+
+  const {data: statisticsList, isLoading} = linkService.useGetLinksStatisticsQuery(null, {
+    selectFromResult: ({ data, isLoading }) => ({
+      data: data? Object.values(data) : [],
+      isLoading
+    }),
+  });
+
+  
 
   const sortedStatisticsList = useMemo(() => {
     switch (sortParam) {
@@ -52,9 +67,13 @@ const Statistics: FC = () => {
           return b.count - a.count;
         });
       case "newest":
-        return statisticsList;
+        return statisticsList.reverse();
+      case "oldest":
+        return statisticsList
     }
-  }, [sortParam]);
+  }, [sortParam, statisticsList]);
+
+  console.debug(sortedStatisticsList)
 
   return (
     <div
@@ -65,7 +84,7 @@ const Statistics: FC = () => {
         justifyContent: "center",
       }}
     >
-      <div style={{ display: "block", marginLeft: "-430px" }}>
+      {statisticsList.length !== 0 && !isLoading? (<div style={{ display: "block", marginLeft: "-430px" }}>
         <h2 style={{ display: "inline-block" }}>Sort by</h2>
         <Select
           style={{
@@ -73,10 +92,16 @@ const Statistics: FC = () => {
             display: "inline-block",
             marginLeft: "10px",
           }}
+          defaultValue={"newest"}
           options={sortOptions}
-          onChange={(value) => setSortParam(value)}
+          onChange={(value) => setSortParam(value as SortParams)}
         />
-      </div>
+      </div>) : <></>}
+      {isLoading ? (
+        <div>
+          <Spin style={{ marginTop: "20px" }} tip="Loading" size="large"></Spin>
+        </div>
+      ) : <></>}
       {sortedStatisticsList.map((listItem, index) => (
         <div
           key={index}
@@ -100,13 +125,13 @@ const Statistics: FC = () => {
                 width: "400px",
               }}
             >
-              {listItem.fullLinkName}
+              {listItem.short_link}
             </div>
           </div>
-          <div style={{ width: "100px" }}>count: {listItem.count}</div>
+          <div style={{ width: "130px" }}>count: {listItem.count}</div>
         </div>
       ))}
-      {statisticsList.length === 0 ? <Empty /> : <></>}
+      {statisticsList.length === 0 && !isLoading? <Empty /> : <></>}
     </div>
   );
 };

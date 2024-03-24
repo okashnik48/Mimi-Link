@@ -15,8 +15,6 @@ const RedirectComponent: FC = () => {
     useEffect(() =>{
         const uuId = shortUrl?.replace("http://localhost:8080/", "");
         dispatch(linkService.endpoints.getFullLink.initiate(uuId as string)).unwrap().then((uuId) =>{
-            alert(uuId)
-            
             window.location.href = uuId;
         }).catch(() =>{
             navigate("/error")

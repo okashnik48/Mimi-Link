@@ -2,16 +2,15 @@ import { toast } from "react-toastify";
 import { serviceApi } from "./app.service";
 
 type LinkStat = {
-    count: number, 
-    fullLinkName: string 
-}
+  count: number;
+  short_link: string;
+};
 
-type links = Record<string, LinkStat>
-
+type LinksProps = Record<string, LinkStat>;
 
 const linkService = serviceApi.injectEndpoints({
   endpoints: (builder) => ({
-    sendFullUrl: builder.mutation<string , {short_link: string}>({
+    sendFullUrl: builder.mutation<string, { original_link: string }>({
       query: (body) => ({
         url: "/transform",
         method: "POST",
@@ -23,21 +22,24 @@ const linkService = serviceApi.injectEndpoints({
             toast.success("Success");
           })
           .catch(({ error }) => {
-            console.log(error)
-            toast.error(error.data.message);
+            error.data
+              ? toast.error(error.data.message)
+              : toast.error(error.error);
           });
       },
+      invalidatesTags: ["link"],
     }),
-    getLinksStatistics: builder.query<LinkStat[], null>({
+    getLinksStatistics: builder.query<LinksProps, null>({
       query: () => ({
-        url: "statistics"
+        url: "statistics",
       }),
+      providesTags: ["link"],
     }),
     getFullLink: builder.query<string, string>({
-        query: (uuId) => ({
-          url: `original/${uuId}`,
-        }),
+      query: (uuId) => ({
+        url: `original/${uuId}`,
       }),
+    }),
   }),
 });
 

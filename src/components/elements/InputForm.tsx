@@ -36,7 +36,7 @@ const Auth: FC = () => {
   console.debug(error)
   const onSubmit: SubmitHandler<DefaultValues> = (formData) => {
     console.log(formData);
-    sendFullLinkTrigger({short_link: formData.linkName});
+    sendFullLinkTrigger({original_link: formData.linkName});
   };
 
   return (
