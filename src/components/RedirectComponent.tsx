@@ -2,11 +2,9 @@ import React, { FC, useEffect } from "react";
 
 import { useNavigate, useParams } from "react-router-dom";
 import linkService from "../services/link.service";
-import { store } from "../store/store";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../store/store";
 
-type AppDispatch = typeof store.dispatch
-const useAppDispatch: () => AppDispatch = useDispatch
+
 
 const RedirectComponent: FC = () => {
     const navigate = useNavigate()

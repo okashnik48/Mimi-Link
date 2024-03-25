@@ -1,13 +1,13 @@
 import React from "react";
 
-import MainComponent from "../components/MainComponent";
 import Error from "../components/Error";
 import RedirectComponent from "../components/RedirectComponent";
+import Landing from "../components/Landing";
 
 export const ROUTES_CONFIG = [
   {
     path: "/",
-    element: <MainComponent />,
+    element: <Landing />,
   },
   {
     path: "/:shortUrl",

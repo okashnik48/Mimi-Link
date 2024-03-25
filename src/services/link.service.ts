@@ -1,12 +1,13 @@
 import { toast } from "react-toastify";
 import { serviceApi } from "./app.service";
+import { useAppDispatch } from "../store/store";
 
 type LinkStat = {
-  count: number;
-  short_link: string;
+  count: number | null;
+  created_at: string;
 };
 
-type LinksProps = Record<string, LinkStat>;
+const dispatch = useAppDispatch;
 
 const linkService = serviceApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -29,16 +30,27 @@ const linkService = serviceApi.injectEndpoints({
       },
       invalidatesTags: ["link"],
     }),
-    getLinksStatistics: builder.query<LinksProps, null>({
-      query: () => ({
-        url: "statistics",
+    getLinksStatistics: builder.query<LinkStat, string>({
+      query: (short_link) => ({
+        url: `statistics/${short_link}`,
       }),
-      providesTags: ["link"],
+      async onQueryStarted(arg, api) {
+        api.queryFulfilled
+          .then(() => {
+            toast.success("Success");
+          })
+          .catch(({ error }) => {
+            error.data
+              ? toast.error(error.data)
+              : toast.error(error.error);
+          });
+      },
     }),
     getFullLink: builder.query<string, string>({
       query: (uuId) => ({
         url: `original/${uuId}`,
       }),
+      
     }),
   }),
 });

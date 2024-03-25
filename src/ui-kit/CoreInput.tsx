@@ -36,7 +36,7 @@ export const CoreInput = ({
               {...field}
             />
             {fieldState.error && (
-              <div style={{ color: "red", marginTop: "5px" }}>
+              <div style={{ color: "black", marginTop: "5px" }}>
                 {fieldState.error.message}
               </div>
             )}

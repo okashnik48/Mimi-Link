@@ -6,9 +6,11 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, Spin } from "antd";
 
+
 import linkService from "../../services/link.service";
 
 import { Typography } from "antd";
+import { CopyOutlined } from "@ant-design/icons";
 
 const { Paragraph } = Typography;
 
@@ -16,7 +18,7 @@ type DefaultValues = {
   linkName: string;
 };
 
-const Auth: FC = () => {
+const InputForm: FC = () => {
   const URL =
     /^((https?|ftp):\/\/)?(www.)?(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i;
 
@@ -34,18 +36,11 @@ const Auth: FC = () => {
   const [sendFullLinkTrigger, { data, isLoading, isError, error }] =
     linkService.useSendFullUrlMutation();
   const onSubmit: SubmitHandler<DefaultValues> = (formData) => {
-    sendFullLinkTrigger({original_link: formData.linkName});
+    sendFullLinkTrigger({ original_link: formData.linkName });
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
+    <div>
       <form
         onSubmit={handleSubmit(onSubmit)}
         style={{
@@ -64,21 +59,29 @@ const Auth: FC = () => {
           />
         </div>
 
-        <Button htmlType="submit" type="primary" style={{ marginLeft: "10px" }}>
+        <Button htmlType="submit" type="primary" style={{ marginLeft: "10px", backgroundColor: "white", color: "black", borderRadius: "15px" }} size="middle">
           Confirm
         </Button>
       </form>
       {isLoading ? (
         <div>
-          <Spin style={{ marginTop: "20px" }} tip="Loading" size="large"></Spin>
+          <Spin style={{ marginTop: "20px", display: "flex", alignItems: "center", justifyContent: "center"}} tip="Loading" size="large"></Spin>
         </div>
       ) : isError ? (
-        <h2 style={{ marginTop: "30px", color: "red" }}>Something wrong</h2>
+        <h2 style={{ marginTop: "30px", color: "black", textAlign: "center" }}>Something wrong</h2>
       ) : (
-        <Paragraph style={{fontSize: "30px", marginTop: "20px"}} copyable={data ? true : false}>{data}</Paragraph>
+        <Paragraph
+          style={{ fontSize: "30px", marginTop: "-40px" , marginLeft: "750px", color: "white"}}
+          copyable={data? {
+            text: data,
+            icon: <CopyOutlined style={{ color: "white" }} />
+          } : false}
+        >
+          {data}
+        </Paragraph>
       )}
     </div>
   );
 };
 //{error.data.message}
-export default Auth;
+export default InputForm;
